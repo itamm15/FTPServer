@@ -13,8 +13,8 @@ import javax.swing.WindowConstants;
  */
 
 public class Frame extends JFrame {
-    private final int WIDTH = 500;
-    private final int HEIGHT = 300;
+    private final int WIDTH = 600;
+    private final int HEIGHT = 400;
     
     public Frame() {
         super("FTPServer");
@@ -22,9 +22,13 @@ public class Frame extends JFrame {
     
     
     public void init() { 
-     // Actions to be kept on the bottom
-     setSize(WIDTH, HEIGHT);
-     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-     setVisible(true);
+        RegistrationPanel registrationPanel = new RegistrationPanel();
+      
+        getContentPane().add(registrationPanel);
+        
+        // Actions to be kept on the bottom
+        setSize(WIDTH, HEIGHT);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
     }
 }
