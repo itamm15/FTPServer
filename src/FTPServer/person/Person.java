@@ -4,10 +4,8 @@
  */
 package FTPServer.person;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 /**
@@ -15,7 +13,8 @@ import java.util.regex.Pattern;
  * @author mateuszosinski
  */
 public class Person {
-    private final File USERS_FILE = new File("users.txt");
+    private static final File USERS_FILE = new File("users.txt");
+    private static ArrayList<Person> people = new ArrayList<>();
     private String email;
     // TODO: turn it `hashedPassword`
     private String password;
@@ -38,6 +37,11 @@ public class Person {
             // TODO: add more specific way of returning an errors
             throw new Exception("Oupsi, something went wrong! Try again!");
         }
+    }
+
+    public Person(String[] data) throws Exception {
+        // email, password, firstname, lastname
+        this(data[2], data[3], data[0], data[1]);
     }
 
     @Override
@@ -75,6 +79,28 @@ public class Person {
         }
     }
 
+    public static void loadUsersFromFile() {
+        readUsersFromFile();
+    }
+
+    private static void readUsersFromFile() {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(USERS_FILE)));
+            String line;
+            while (true) {
+                line = bufferedReader.readLine();
+                if (line == null) break;
+                String[] data = line.split(";");
+                Person person = new Person(data);
+                people.add(person);
+            }
+
+            bufferedReader.close();
+        } catch (Exception exception) {
+            System.out.println("Something went wrong, try again!");
+        }
+    }
+
     private static class EmailValidator {
         private static final String EMAIL_PATTERN =
                 "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
@@ -84,7 +110,14 @@ public class Person {
             if (email == null) {
                 return false;
             }
-            return pattern.matcher(email).matches();
+
+            boolean isEmailTaken = false;
+
+            for (Person person : people) {
+                if (person.email.equals(email)) isEmailTaken = true;
+            }
+
+            return pattern.matcher(email).matches() && !isEmailTaken;
         }
     }
 

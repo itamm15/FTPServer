@@ -78,6 +78,7 @@ public class RegistrationPanel extends JPanel {
         });
 
         registerButton.addActionListener(event -> {
+            Person.loadUsersFromFile();
             registerUser();
         });
     }
