@@ -58,6 +58,6 @@ public class Frame extends JFrame {
     }
 
     public static void setCurrentUser(Person currentUser) {
-        this.currentUser = currentUser;
+        Frame.currentUser = currentUser;
     }
 }
