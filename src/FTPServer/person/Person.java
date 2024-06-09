@@ -4,6 +4,8 @@
  */
 package FTPServer.person;
 
+import FTPServer.frame.Frame;
+
 import javax.security.auth.login.AccountNotFoundException;
 import java.io.*;
 import java.util.ArrayList;
@@ -99,17 +101,17 @@ public class Person {
     }
 
     public static void authorizeUser(String email, String password) throws AccountNotFoundException {
-        boolean isUserAuthenticated = false;
+        Person currentPerson = null;
         for (Person person: people) {
             if (person.email.equals(email) && person.password.equals(password)) {
-                isUserAuthenticated = true;
+                currentPerson = person;
                 break;
             }
         }
 
-        if (isUserAuthenticated) {
+        if (currentPerson != null) {
             System.out.println("User has been authenticated");
-            // TODO: set global user
+            Frame.setCurrentUser(currentPerson);
         } else {
             throw new AccountNotFoundException("Could not authenticate the user!");
         }

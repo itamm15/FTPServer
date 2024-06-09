@@ -4,6 +4,8 @@
  */
 package FTPServer.frame;
 
+import FTPServer.person.Person;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -17,6 +19,8 @@ public class Frame extends JFrame {
     private final int HEIGHT = 400;
     private CardLayout cardLayout;
     private JPanel cardPanel;
+
+    private static Person currentUser;
 
     public Frame() {
         super("FTPServer");
@@ -47,5 +51,13 @@ public class Frame extends JFrame {
 
     public void showRegistrationPage() {
         cardLayout.show(cardPanel, "RegistrationPanel");
+    }
+
+    public static Person getCurrentUser() {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(Person currentUser) {
+        this.currentUser = currentUser;
     }
 }
