@@ -4,6 +4,8 @@
  */
 package FTPServer.frame;
 
+import FTPServer.person.Person;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -74,5 +76,22 @@ public class RegistrationPanel extends JPanel {
         goToLoginButton.addActionListener(event -> {
             frame.showLoginPanel();
         });
+
+        registerButton.addActionListener(event -> {
+            registerUser();
+        });
+    }
+
+    private void registerUser() {
+        try {
+            String email = emailField.getText();
+            String firstname = firstnameField.getText();
+            String lastname = lastnameField.getText();
+            String password = String.valueOf(passwordField.getPassword());
+
+            Person person = new Person(email, password, firstname, lastname);
+        } catch (Exception exception) {
+            System.out.println("Something went wrong! Try again.");
+        }
     }
 }
