@@ -15,7 +15,7 @@ public class RegistrationPanel extends JPanel {
     private JTextField firstnameField;
     private JTextField lastnameField;
     private JTextField emailField;
-    private JPasswordField passwordField; // Zmieniono na JPasswordField
+    private JPasswordField passwordField;
     private JButton registerButton;
 
     public RegistrationPanel() {
