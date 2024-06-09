@@ -94,7 +94,7 @@ public class RegistrationPanel extends JPanel {
 
             person.saveUserToFile();
         } catch (Exception exception) {
-            System.out.println("Something went wrong! Try again.");
+            System.out.println("Something went wrong! Try again." + exception);
         }
     }
 }

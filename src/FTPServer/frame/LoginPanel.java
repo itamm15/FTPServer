@@ -1,5 +1,7 @@
 package FTPServer.frame;
 
+import FTPServer.person.Person;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -50,5 +52,21 @@ public class LoginPanel extends JPanel {
         goToRegistrationButton.addActionListener(event -> {
             frame.showRegistrationPage();
         });
+
+        loginButton.addActionListener(event -> {
+            Person.loadUsersFromFile();
+            loginUser();
+        });
+    }
+
+    private void loginUser() {
+        try {
+            String email = emailField.getText();
+            String password = String.valueOf(passwordField.getPassword());
+
+            Person.authorizeUser(email, password);
+        } catch (Exception exception) {
+            System.out.println("Oupsi, something went wrong!" + exception);
+        }
     }
 }

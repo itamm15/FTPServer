@@ -4,6 +4,7 @@
  */
 package FTPServer.person;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -20,6 +21,24 @@ public class Person {
     private String password;
     private String firstname;
     private String lastname;
+
+    public Person(String email, String password, String firstname, String lastname, boolean shouldCheckEmail) throws Exception {
+        boolean isEmailValid = true;
+        if (shouldCheckEmail) isEmailValid = EmailValidator.isValid(email);
+        boolean isPasswordValid = PasswordValidator.isValid(password);
+        boolean isFirstNameValid = NameValidator.isValid(firstname);
+        boolean isLastNameValid = NameValidator.isValid(lastname);
+
+        if (isEmailValid && isPasswordValid && isFirstNameValid && isLastNameValid) {
+            this.email = email;
+            this.password = password;
+            this.firstname = firstname;
+            this.lastname = lastname;
+        } else {
+            // TODO: add more specific way of returning an errors
+            throw new Exception("Oupsi, something went wrong! Try again!");
+        }
+    }
 
     public Person(String email, String password, String firstname, String lastname) throws Exception {
         // Validate
@@ -39,9 +58,9 @@ public class Person {
         }
     }
 
-    public Person(String[] data) throws Exception {
-        // email, password, firstname, lastname
-        this(data[2], data[3], data[0], data[1]);
+    public Person(String[] data, boolean shouldCheckEmail) throws Exception {
+        // email, password, firstname, lastname, shouldCheckEmail
+        this(data[2], data[3], data[0], data[1], false);
     }
 
     @Override
@@ -79,6 +98,23 @@ public class Person {
         }
     }
 
+    public static void authorizeUser(String email, String password) throws AccountNotFoundException {
+        boolean isUserAuthenticated = false;
+        for (Person person: people) {
+            if (person.email.equals(email) && person.password.equals(password)) {
+                isUserAuthenticated = true;
+                break;
+            }
+        }
+
+        if (isUserAuthenticated) {
+            System.out.println("User has been authenticated");
+            // TODO: set global user
+        } else {
+            throw new AccountNotFoundException("Could not authenticate the user!");
+        }
+    }
+
     public static void loadUsersFromFile() {
         readUsersFromFile();
     }
@@ -91,13 +127,13 @@ public class Person {
                 line = bufferedReader.readLine();
                 if (line == null) break;
                 String[] data = line.split(";");
-                Person person = new Person(data);
+                Person person = new Person(data, false);
                 people.add(person);
             }
 
             bufferedReader.close();
         } catch (Exception exception) {
-            System.out.println("Something went wrong, try again!");
+            System.out.println("Something went wrong, try again!" + exception);
         }
     }
 

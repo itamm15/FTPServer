@@ -1,6 +1,2 @@
-test;test;mat@pat.com;123123123
-test;test;mat@pat.com;123123123
-aa;aaaa;mat23@pat.com;12312331312321
-aa;aaaa;mat23@pat.com;12312331312321
-aa;aaaa;mat233@pat.com;12312331312321
-ee;ee;mat1111111@pat.com;12312321312312321
+mateusz;osinski;mat@gmail.com;qwerty
+mat;mat;mat@pat.com;12312321321321321
