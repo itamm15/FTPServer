@@ -28,7 +28,7 @@ public class Frame extends JFrame {
         cardPanel = new JPanel(cardLayout);
 
         RegistrationPanel registrationPanel = new RegistrationPanel(this);
-        LoginPanel loginPanel = new LoginPanel();
+        LoginPanel loginPanel = new LoginPanel(this);
 
         cardPanel.add(registrationPanel, "RegistrationPanel");
         cardPanel.add(loginPanel, "LoginPanel");
@@ -43,5 +43,9 @@ public class Frame extends JFrame {
 
     public void showLoginPanel() {
         cardLayout.show(cardPanel, "LoginPanel");
+    }
+
+    public void showRegistrationPage() {
+        cardLayout.show(cardPanel, "RegistrationPanel");
     }
 }
