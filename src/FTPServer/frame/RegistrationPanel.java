@@ -90,6 +90,8 @@ public class RegistrationPanel extends JPanel {
             String password = String.valueOf(passwordField.getPassword());
 
             Person person = new Person(email, password, firstname, lastname);
+
+            person.saveUserToFile();
         } catch (Exception exception) {
             System.out.println("Something went wrong! Try again.");
         }

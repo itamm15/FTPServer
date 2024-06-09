@@ -4,6 +4,10 @@
  */
 package FTPServer.person;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.regex.Pattern;
 
 /**
@@ -11,6 +15,7 @@ import java.util.regex.Pattern;
  * @author mateuszosinski
  */
 public class Person {
+    private final File USERS_FILE = new File("users.txt");
     private String email;
     // TODO: turn it `hashedPassword`
     private String password;
@@ -42,6 +47,32 @@ public class Person {
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 '}';
+    }
+
+    /*
+    * Saves the user to the file (append).
+    * The file stores the users as the CSV:
+    *     firstname;lastname;email;password
+    *
+    * Example:
+    *     Mariusz;Paździoch;mariusz.pazdzioch@gmail.com;arkagdynialechpoznan@gmail.com
+    *
+    */
+    public void saveUserToFile() {
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(USERS_FILE, true)));
+            String data = this.firstname + ";" + this.lastname + ";" + this.email + ";" + this.password;
+
+            if (USERS_FILE.exists() && USERS_FILE.length() > 0) {
+                data = "\n" + data;
+            }
+
+            bufferedWriter.write(data);
+
+            bufferedWriter.close();
+        } catch (Exception exception) {
+            System.out.println("Something went wrong, try again!");
+        }
     }
 
     private static class EmailValidator {
