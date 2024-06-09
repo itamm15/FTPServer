@@ -17,8 +17,9 @@ public class RegistrationPanel extends JPanel {
     private JTextField emailField;
     private JPasswordField passwordField;
     private JButton registerButton;
+    private JButton goToLoginButton;
 
-    public RegistrationPanel() {
+    public RegistrationPanel(Frame frame) {
         setLayout(new BorderLayout());
 
         JPanel formPanel = new JPanel();
@@ -34,6 +35,7 @@ public class RegistrationPanel extends JPanel {
         JLabel passwordLabel = new JLabel("Password:");
         passwordField = new JPasswordField(15);
         registerButton = new JButton("Register");
+        goToLoginButton = new JButton("Go to Login");
 
         firstnameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         firstnameField.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -44,6 +46,7 @@ public class RegistrationPanel extends JPanel {
         passwordLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         passwordField.setAlignmentX(Component.CENTER_ALIGNMENT);
         registerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        goToLoginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         formPanel.add(firstnameLabel);
         formPanel.add(Box.createVerticalStrut(10));
@@ -62,7 +65,14 @@ public class RegistrationPanel extends JPanel {
         formPanel.add(passwordField);
         formPanel.add(Box.createVerticalStrut(20));
         formPanel.add(registerButton);
+        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(goToLoginButton);
 
         add(formPanel, BorderLayout.CENTER);
+
+        // actions listeners
+        goToLoginButton.addActionListener(event -> {
+            frame.showLoginPanel();
+        });
     }
 }

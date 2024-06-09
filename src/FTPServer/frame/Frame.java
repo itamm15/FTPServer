@@ -4,8 +4,8 @@
  */
 package FTPServer.frame;
 
-import javax.swing.JFrame;
-import javax.swing.WindowConstants;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -15,20 +15,33 @@ import javax.swing.WindowConstants;
 public class Frame extends JFrame {
     private final int WIDTH = 600;
     private final int HEIGHT = 400;
-    
+    private CardLayout cardLayout;
+    private JPanel cardPanel;
+
     public Frame() {
         super("FTPServer");
     }
     
     
-    public void init() { 
-        RegistrationPanel registrationPanel = new RegistrationPanel();
-      
-        getContentPane().add(registrationPanel);
+    public void init() {
+        cardLayout = new CardLayout();
+        cardPanel = new JPanel(cardLayout);
+
+        RegistrationPanel registrationPanel = new RegistrationPanel(this);
+        LoginPanel loginPanel = new LoginPanel();
+
+        cardPanel.add(registrationPanel, "RegistrationPanel");
+        cardPanel.add(loginPanel, "LoginPanel");
+
+        getContentPane().add(cardPanel);
         
         // Actions to be kept on the bottom
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    public void showLoginPanel() {
+        cardLayout.show(cardPanel, "LoginPanel");
     }
 }
