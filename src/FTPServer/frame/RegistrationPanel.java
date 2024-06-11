@@ -1,63 +1,52 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package FTPServer.frame;
 
-import FTPServer.person.Person;
+import FTPServer.client.Client;
 
 import javax.swing.*;
 import java.awt.*;
 
-/**
- *
- * @author mateuszosinski
- */
 public class RegistrationPanel extends JPanel {
-    private JTextField firstnameField;
-    private JTextField lastnameField;
     private JTextField emailField;
     private JPasswordField passwordField;
+    private JTextField firstnameField;
+    private JTextField lastnameField;
     private JButton registerButton;
     private JButton goToLoginButton;
+    private Client client;
 
-    public RegistrationPanel(Frame frame) {
+    private Frame frame;
+
+    public RegistrationPanel(Frame frame, Client client) {
+        this.frame = frame;
+        this.client = client;
         setLayout(new BorderLayout());
 
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Marginesy wokół panelu
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JLabel firstnameLabel = new JLabel("First name:");
-        firstnameField = new JTextField(15);
-        JLabel lastnameLabel = new JLabel("Last name:");
-        lastnameField = new JTextField(15);
         JLabel emailLabel = new JLabel("Email address:");
         emailField = new JTextField(15);
         JLabel passwordLabel = new JLabel("Password:");
         passwordField = new JPasswordField(15);
+        JLabel firstnameLabel = new JLabel("First name:");
+        firstnameField = new JTextField(15);
+        JLabel lastnameLabel = new JLabel("Last name:");
+        lastnameField = new JTextField(15);
         registerButton = new JButton("Register");
-        goToLoginButton = new JButton("Go to Login");
+        goToLoginButton = new JButton("Go to login");
 
-        firstnameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        firstnameField.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lastnameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lastnameField.setAlignmentX(Component.CENTER_ALIGNMENT);
         emailLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         emailField.setAlignmentX(Component.CENTER_ALIGNMENT);
         passwordLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         passwordField.setAlignmentX(Component.CENTER_ALIGNMENT);
+        firstnameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        firstnameField.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lastnameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lastnameField.setAlignmentX(Component.CENTER_ALIGNMENT);
         registerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         goToLoginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        formPanel.add(firstnameLabel);
-        formPanel.add(Box.createVerticalStrut(10));
-        formPanel.add(firstnameField);
-        formPanel.add(Box.createVerticalStrut(10));
-        formPanel.add(lastnameLabel);
-        formPanel.add(Box.createVerticalStrut(10));
-        formPanel.add(lastnameField);
-        formPanel.add(Box.createVerticalStrut(10));
         formPanel.add(emailLabel);
         formPanel.add(Box.createVerticalStrut(10));
         formPanel.add(emailField);
@@ -65,36 +54,36 @@ public class RegistrationPanel extends JPanel {
         formPanel.add(passwordLabel);
         formPanel.add(Box.createVerticalStrut(10));
         formPanel.add(passwordField);
+        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(firstnameLabel);
+        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(firstnameField);
+        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(lastnameLabel);
+        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(lastnameField);
         formPanel.add(Box.createVerticalStrut(20));
         formPanel.add(registerButton);
-        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(Box.createVerticalStrut(20));
         formPanel.add(goToLoginButton);
 
         add(formPanel, BorderLayout.CENTER);
 
-        // actions listeners
         goToLoginButton.addActionListener(event -> {
             frame.showLoginPanel();
         });
 
         registerButton.addActionListener(event -> {
-            Person.loadUsersFromFile();
             registerUser();
         });
     }
 
     private void registerUser() {
-        try {
-            String email = emailField.getText();
-            String firstname = firstnameField.getText();
-            String lastname = lastnameField.getText();
-            String password = String.valueOf(passwordField.getPassword());
+        String email = emailField.getText();
+        String firstname = firstnameField.getText();
+        String lastname = lastnameField.getText();
+        String password = String.valueOf(passwordField.getPassword());
 
-            Person person = new Person(email, password, firstname, lastname);
-
-            person.saveUserToFile();
-        } catch (Exception exception) {
-            System.out.println("Something went wrong! Try again." + exception);
-        }
+        client.registerUser(email, password, firstname, lastname, frame);
     }
 }

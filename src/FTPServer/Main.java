@@ -1,18 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package FTPServer;
 
 import FTPServer.frame.Frame;
+import FTPServer.client.Client;
 
-/**
- *
- * @author mateuszosinski
- */
 public class Main {
-    public static void main(String args[]) {
-        Frame frame = new Frame();
+    public static void main(String[] args) {
+        Client client = new Client();
+        client.init();
+
+        Frame frame = new Frame(client);
         frame.init();
     }
 }

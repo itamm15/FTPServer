@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  *
  * @author mateuszosinski
  */
-public class Person {
+public class Person implements Serializable {
     private static final File USERS_FILE = new File("users.txt");
     private static ArrayList<Person> people = new ArrayList<>();
     private String email;

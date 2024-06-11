@@ -4,6 +4,7 @@
  */
 package FTPServer.frame;
 
+import FTPServer.client.Client;
 import FTPServer.person.Person;
 
 import javax.swing.*;
@@ -19,19 +20,22 @@ public class Frame extends JFrame {
     private final int HEIGHT = 400;
     private CardLayout cardLayout;
     private JPanel cardPanel;
+    private Client client;
 
     private static Person currentUser;
 
-    public Frame() {
+    public Frame(Client client) {
         super("FTPServer");
+
+        this.client = client;
+        System.out.println("Frame created");
     }
-    
-    
+
     public void init() {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
 
-        RegistrationPanel registrationPanel = new RegistrationPanel(this);
+        RegistrationPanel registrationPanel = new RegistrationPanel(this, this.client);
         LoginPanel loginPanel = new LoginPanel(this);
 
         cardPanel.add(registrationPanel, "RegistrationPanel");
