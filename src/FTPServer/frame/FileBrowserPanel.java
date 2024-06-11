@@ -55,6 +55,7 @@ public class FileBrowserPanel extends JPanel {
             Person currentUser = this.frame.getCurrentUser();
 
             output.println("LIST_FILES;" + currentUser.getEmail());
+            listModel.clear();
             String fileName;
             while ((fileName = input.readLine()) != null && !fileName.equals("END_OF_LIST")) {
                 listModel.addElement(fileName);
@@ -68,5 +69,6 @@ public class FileBrowserPanel extends JPanel {
 
     private void uploadFileByUser() {
         this.client.uploadFile(this.frame.getCurrentUser());
+        loadFiles();
     }
 }

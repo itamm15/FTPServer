@@ -144,6 +144,9 @@ public class ClientHandler implements Runnable {
             int read;
             while ((read = is.read(buffer)) != -1) {
                 fos.write(buffer, 0, read);
+                if (read < 4096) {
+                    break;
+                }
             }
 
             fos.close();
@@ -152,6 +155,7 @@ public class ClientHandler implements Runnable {
             output.println("UPLOAD_FAILED: " + e.getMessage());
         }
     }
+
 
     private void handleListFiles(String message) {
         try {
