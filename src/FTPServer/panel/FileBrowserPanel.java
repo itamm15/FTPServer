@@ -13,14 +13,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 public class FileBrowserPanel extends JPanel {
     private JLabel emailLabel;
     private JLabel nameLabel;
     private JList<String> fileList;
-
-    // TODO: Change to ArrayList
-    private DefaultListModel<String> listModel;
+    private ArrayList<String> fileArrayList;
     private Frame frame;
     private Client client;
 
@@ -41,8 +40,8 @@ public class FileBrowserPanel extends JPanel {
         userInfoPanel.add(emailLabel, BorderLayout.WEST);
         userInfoPanel.add(nameLabel, BorderLayout.EAST);
 
-        listModel = new DefaultListModel<>();
-        fileList = new JList<>(listModel);
+        fileArrayList = new ArrayList<>();
+        fileList = new JList<>(new DefaultListModel<>());
         JScrollPane scrollPane = new JScrollPane(fileList);
 
         fileList.addMouseListener(new MouseAdapter() {
@@ -51,7 +50,7 @@ public class FileBrowserPanel extends JPanel {
                 if (e.getClickCount() == 2) {
                     int index = fileList.locationToIndex(e.getPoint());
                     if (index >= 0) {
-                        String selectedFile = fileList.getModel().getElementAt(index);
+                        String selectedFile = fileArrayList.get(index);
                         openFileViewer(selectedFile);
                     }
                 }
@@ -83,9 +82,12 @@ public class FileBrowserPanel extends JPanel {
             Person currentUser = this.frame.getCurrentUser();
 
             output.println("LIST_FILES;" + currentUser.getEmail());
+            fileArrayList.clear();
+            DefaultListModel<String> listModel = (DefaultListModel<String>) fileList.getModel();
             listModel.clear();
             String fileName;
             while ((fileName = input.readLine()) != null && !fileName.equals("END_OF_LIST")) {
+                fileArrayList.add(fileName);
                 listModel.addElement(fileName);
             }
 
