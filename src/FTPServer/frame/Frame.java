@@ -5,6 +5,9 @@
 package FTPServer.frame;
 
 import FTPServer.client.Client;
+import FTPServer.panel.FileBrowserPanel;
+import FTPServer.panel.LoginPanel;
+import FTPServer.panel.RegistrationPanel;
 import FTPServer.person.Person;
 
 import javax.swing.*;

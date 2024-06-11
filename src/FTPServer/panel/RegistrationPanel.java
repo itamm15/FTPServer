@@ -1,6 +1,7 @@
-package FTPServer.frame;
+package FTPServer.panel;
 
 import FTPServer.client.Client;
+import FTPServer.frame.Frame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +15,7 @@ public class RegistrationPanel extends JPanel {
     private JButton goToLoginButton;
     private Client client;
 
-    private Frame frame;
+    private FTPServer.frame.Frame frame;
 
     public RegistrationPanel(Frame frame, Client client) {
         this.frame = frame;

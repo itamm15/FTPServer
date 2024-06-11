@@ -1,6 +1,7 @@
-package FTPServer.frame;
+package FTPServer.panel;
 
 import FTPServer.client.Client;
+import FTPServer.frame.Frame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +11,7 @@ public class LoginPanel extends JPanel {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton goToRegistrationButton;
-    private Frame frame;
+    private FTPServer.frame.Frame frame;
     private Client client;
 
     public LoginPanel(Frame frame, Client client) {

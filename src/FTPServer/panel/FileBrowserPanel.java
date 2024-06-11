@@ -1,6 +1,7 @@
-package FTPServer.frame;
+package FTPServer.panel;
 
 import FTPServer.client.Client;
+import FTPServer.frame.Frame;
 import FTPServer.person.Person;
 
 import javax.swing.*;
@@ -13,7 +14,7 @@ public class FileBrowserPanel extends JPanel {
     private JList<String> fileList;
     // TODO: change to ArrayList<>
     private DefaultListModel<String> listModel;
-    private Frame frame;
+    private FTPServer.frame.Frame frame;
     private Client client;
 
     public FileBrowserPanel(Frame frame, Client client) {
