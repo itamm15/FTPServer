@@ -21,8 +21,12 @@ public class Person implements Serializable {
     private String firstname;
     private String lastname;
 
-    // TODO: trim the values to avoid white-spaces
     public Person(String email, String password, String firstname, String lastname, boolean shouldCheckEmail) throws Exception {
+        email = email.trim();
+        password = password.trim();
+        firstname = firstname.trim();
+        lastname = lastname.trim();
+
         boolean isEmailValid = true;
         if (shouldCheckEmail) isEmailValid = EmailValidator.isValid(email);
         boolean isPasswordValid = PasswordValidator.isValid(password);
@@ -41,6 +45,11 @@ public class Person implements Serializable {
     }
 
     public Person(String email, String password, String firstname, String lastname) throws Exception {
+        email = email.trim();
+        password = password.trim();
+        firstname = firstname.trim();
+        lastname = lastname.trim();
+
         // Validate
         boolean isEmailValid = EmailValidator.isValid(email);
         boolean isPasswordValid = PasswordValidator.isValid(password);
