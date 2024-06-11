@@ -1,5 +1,6 @@
 package FTPServer.client;
 
+import FTPServer.file.CustomFile;
 import FTPServer.person.Person;
 
 import javax.security.auth.login.AccountNotFoundException;
@@ -23,7 +24,7 @@ public class ClientHandler implements Runnable {
         try {
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream(), true);
-            objectOutputStream = new ObjectOutputStream(socket.getOutputStream()); // Initialize once
+            objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 
             String message;
             while ((message = input.readLine()) != null) {
@@ -130,32 +131,44 @@ public class ClientHandler implements Runnable {
             String email = parts[1];
             String fileName = parts[2];
 
-            File userDirectory = new File("ftp_files/" + email);
+            CustomFile userDirectory = new CustomFile("ftp_files/" + email);
             if (!userDirectory.exists()) {
                 output.println("UPLOAD_FAILED: User directory does not exist.");
                 return;
             }
 
-            File file = new File(userDirectory, fileName);
-            FileOutputStream fos = new FileOutputStream(file);
+            System.out.println("SERVER: Created userDirectory");
+
+            CustomFile file = new CustomFile(userDirectory.getPath() + "/" + fileName);
+            if (!file.createNewFile()) {
+                System.out.println("SERVER: Could not create the file!");
+                output.println("UPLOAD_FAILED: Failed to create file.");
+                return;
+            }
+
+            System.out.println("SERVER: Created user file");
+            System.out.println("SERVER: Start processing the file");
+
+            FileOutputStream fos = new FileOutputStream(file.getPath());
             InputStream is = socket.getInputStream();
             byte[] buffer = new byte[4096];
 
             int read;
             while ((read = is.read(buffer)) != -1) {
                 fos.write(buffer, 0, read);
-                if (read < 4096) {
-                    break;
-                }
+
+                if(read < buffer.length) break;
             }
 
-            fos.close();
+            System.out.println("SERVER: File uploaded successfully!");
             output.println("UPLOAD_SUCCESS");
+
+            fos.close();
         } catch (IOException e) {
+            System.out.println("SERVER: something went wrong!");
             output.println("UPLOAD_FAILED: " + e.getMessage());
         }
     }
-
 
     private void handleListFiles(String message) {
         try {

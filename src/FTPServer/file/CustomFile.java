@@ -12,16 +12,12 @@ public class CustomFile {
         this.file = new File(pathname);
     }
 
+    public String getPath() {
+        return this.file.getPath();
+    }
+
     public boolean exists() {
         return file.exists();
-    }
-
-    public boolean isDirectory() {
-        return file.isDirectory();
-    }
-
-    public boolean isFile() {
-        return file.isFile();
     }
 
     public String getName() {
@@ -48,13 +44,5 @@ public class CustomFile {
             e.printStackTrace();
             return false;
         }
-    }
-
-    public boolean mkdir() {
-        return file.mkdir();
-    }
-
-    public boolean delete() {
-        return file.delete();
     }
 }

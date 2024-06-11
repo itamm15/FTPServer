@@ -3,7 +3,6 @@ package FTPServer.client;
 import FTPServer.frame.Frame;
 import FTPServer.person.Person;
 
-import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 
@@ -88,37 +87,37 @@ public class Client {
         }
     }
 
-    public void uploadFile(Person currentUser) {
-        System.out.println("CLIENT: User starts picking the files!");
-        JFileChooser fileChooser = new JFileChooser();
-        int chosenOption = fileChooser.showOpenDialog(null);
-        if (chosenOption == JFileChooser.APPROVE_OPTION) {
-            System.out.println("CLIENT: Uploading files to the server");
-            File file = fileChooser.getSelectedFile();
-            try {
-                output.println("UPLOAD;" + currentUser.getEmail() + ";" + file.getName());
+    public void uploadFile(File file, Person currentUser) {
+        System.out.println("CLIENT: Uploading file to the server");
+        try {
+            output.println("UPLOAD;" + currentUser.getEmail() + ";" + file.getName());
 
-                byte[] buffer = new byte[4096];
-                FileInputStream fis = new FileInputStream(file);
-                OutputStream os = socket.getOutputStream();
+            byte[] buffer = new byte[4096];
+            FileInputStream fis = new FileInputStream(file);
+            OutputStream os = socket.getOutputStream();
 
-                int read;
-                while ((read = fis.read(buffer)) != -1) {
-                    os.write(buffer, 0, read);
-                }
+            int read;
+            while ((read = fis.read(buffer)) != -1) {
+                os.write(buffer, 0, read);
+            }
 
-                os.flush();
-                fis.close();
+            os.flush(); // Wysyła wszystkie dane, które mogą być zablokowane w buforze.
+            fis.close();
+            //os.close(); // Zamykanie tylko OutputStream, a nie całego gniazda
 
-                String serverResponse = input.readLine();
+            // Wysłanie komunikatu zakończenia przesyłania
+            //output.println("END_UPLOAD");
+
+            String serverResponse;
+            if ((serverResponse = input.readLine()) != null) {
                 if (serverResponse.equals("UPLOAD_SUCCESS")) {
                     System.out.println("File uploaded successfully.");
                 } else {
                     System.out.println("File upload failed: " + serverResponse);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -6,13 +6,17 @@ import FTPServer.person.Person;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class FileBrowserPanel extends JPanel {
     private JLabel emailLabel;
     private JLabel nameLabel;
     private JList<String> fileList;
-    // TODO: change to ArrayList<>
+
+    // TODO: Change to ArrayList
     private DefaultListModel<String> listModel;
     private Frame frame;
     private Client client;
@@ -48,7 +52,6 @@ public class FileBrowserPanel extends JPanel {
         loadFiles();
     }
 
-    // TODO: move to client
     private void loadFiles() {
         System.out.println("CLIENT: Loading user files");
         try {
@@ -70,7 +73,15 @@ public class FileBrowserPanel extends JPanel {
     }
 
     private void uploadFileByUser() {
-        this.client.uploadFile(this.frame.getCurrentUser());
-        loadFiles();
+        JFileChooser fileChooser = new JFileChooser();
+        int chosenOption = fileChooser.showOpenDialog(frame);
+        if (chosenOption == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            if (selectedFile != null) {
+                client.uploadFile(selectedFile, frame.getCurrentUser());
+                loadFiles();
+            }
+        }
     }
+
 }
