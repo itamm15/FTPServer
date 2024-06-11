@@ -3,6 +3,7 @@ package FTPServer.client;
 import FTPServer.frame.Frame;
 import FTPServer.person.Person;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 
@@ -26,6 +27,21 @@ public class Client {
         }
     }
 
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public BufferedReader getInput() {
+        return input;
+    }
+
+    public PrintWriter getOutput() {
+        return output;
+    }
+
+    public ObjectInputStream getObjectInputStream() {
+        return objectInputStream;
+    }
 
     public void registerUser(String email, String password, String firstname, String lastname, Frame frame) {
         try {
@@ -60,6 +76,7 @@ public class Client {
                 Person person = (Person) objectInputStream.readObject();
                 System.out.println("CLIENT: Settling the current user");
                 frame.setCurrentUser(person);
+                System.out.println("CLIENT: Initializing the FileBrowserPanel");
                 frame.showFileBrowserPanel();
             } else {
                 System.out.println("CLIENT: The user could not be created, see errors: " + feedback);
@@ -68,6 +85,40 @@ public class Client {
             System.out.println("CLIENT: Could not get the user!");
         } catch (ClassNotFoundException e) {
             System.out.println("CLIENT: Could not get the user!");
+        }
+    }
+
+    public void uploadFile(Person currentUser) {
+        System.out.println("CLIENT: User starts picking the files!");
+        JFileChooser fileChooser = new JFileChooser();
+        int chosenOption = fileChooser.showOpenDialog(null);
+        if (chosenOption == JFileChooser.APPROVE_OPTION) {
+            System.out.println("CLIENT: Uploading files to the server");
+            File file = fileChooser.getSelectedFile();
+            try {
+                output.println("UPLOAD;" + currentUser.getEmail() + ";" + file.getName());
+
+                byte[] buffer = new byte[4096];
+                FileInputStream fis = new FileInputStream(file);
+                OutputStream os = socket.getOutputStream();
+
+                int read;
+                while ((read = fis.read(buffer)) != -1) {
+                    os.write(buffer, 0, read);
+                }
+
+                os.flush();
+                fis.close();
+
+                String serverResponse = input.readLine();
+                if (serverResponse.equals("UPLOAD_SUCCESS")) {
+                    System.out.println("File uploaded successfully.");
+                } else {
+                    System.out.println("File upload failed: " + serverResponse);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

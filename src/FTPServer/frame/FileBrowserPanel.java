@@ -5,6 +5,7 @@ import FTPServer.person.Person;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 
 public class FileBrowserPanel extends JPanel {
     private JLabel emailLabel;
@@ -20,7 +21,8 @@ public class FileBrowserPanel extends JPanel {
     }
 
     public void init() {
-        Person currentUser = frame.getCurrentUser();
+        System.out.println("FileBrowserPanel initialization");
+        Person currentUser = this.frame.getCurrentUser();
         setLayout(new BorderLayout());
 
         JPanel userInfoPanel = new JPanel(new BorderLayout());
@@ -37,17 +39,33 @@ public class FileBrowserPanel extends JPanel {
         add(userInfoPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
-        //      loadFiles();
+        JButton uploadButton = new JButton("Upload File");
+        uploadButton.addActionListener(event -> uploadFileByUser());
+        add(uploadButton, BorderLayout.SOUTH);
+
+        loadFiles();
     }
-    
-//    private void loadFiles() {
-//        File directory = new File("files.txt");
-//        File[] files = directory.listFiles();
-//
-//        if (files != null) {
-//            for (File file : files) {
-//                listModel.addElement(file.getName());
-//            }
-//        }
-//    }
+
+    private void loadFiles() {
+        System.out.println("CLIENT: Loading user files");
+        try {
+            PrintWriter output = this.client.getOutput();
+            BufferedReader input = this.client.getInput();
+            Person currentUser = this.frame.getCurrentUser();
+
+            output.println("LIST_FILES;" + currentUser.getEmail());
+            String fileName;
+            while ((fileName = input.readLine()) != null && !fileName.equals("END_OF_LIST")) {
+                listModel.addElement(fileName);
+            }
+
+            System.out.println("CLIENT: Added user files!");
+        } catch (IOException e) {
+            System.out.println("CLIENT: Could not load the files!" + e);
+        }
+    }
+
+    private void uploadFileByUser() {
+        this.client.uploadFile(this.frame.getCurrentUser());
+    }
 }

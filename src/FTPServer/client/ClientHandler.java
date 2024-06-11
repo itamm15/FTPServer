@@ -35,6 +35,12 @@ public class ClientHandler implements Runnable {
                 else if (message.startsWith("AUTHORIZE")) {
                     handleAuthorization(message);
                 }
+                else if (message.startsWith("UPLOAD")) {
+                    handleFileUpload(message);
+                }
+                else if (message.startsWith("LIST_FILES")) {
+                    handleListFiles(message);
+                }
                 else {
                     output.println("Server received: " + message);
                 }
@@ -114,6 +120,59 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             System.out.println("SERVER: Something went wrong while sending the user");
             output.println("Oupsi, something went wrong!");
+        }
+    }
+
+    private void handleFileUpload(String message) {
+        System.out.println("SERVER: Processing the user files");
+        try {
+            String[] parts = message.split(";");
+            String email = parts[1];
+            String fileName = parts[2];
+
+            File userDirectory = new File("ftp_files/" + email);
+            if (!userDirectory.exists()) {
+                output.println("UPLOAD_FAILED: User directory does not exist.");
+                return;
+            }
+
+            File file = new File(userDirectory, fileName);
+            FileOutputStream fos = new FileOutputStream(file);
+            InputStream is = socket.getInputStream();
+            byte[] buffer = new byte[4096];
+
+            int read;
+            while ((read = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, read);
+            }
+
+            fos.close();
+            output.println("UPLOAD_SUCCESS");
+        } catch (IOException e) {
+            output.println("UPLOAD_FAILED: " + e.getMessage());
+        }
+    }
+
+    private void handleListFiles(String message) {
+        try {
+            String[] parts = message.split(";");
+            String email = parts[1];
+
+            File userDirectory = new File("ftp_files/" + email);
+            if (!userDirectory.exists()) {
+                output.println("User directory does not exist.");
+                return;
+            }
+
+            File[] files = userDirectory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    output.println(file.getName());
+                }
+            }
+            output.println("END_OF_LIST");
+        } catch (Exception e) {
+            output.println("Failed to list files: " + e.getMessage());
         }
     }
 }
