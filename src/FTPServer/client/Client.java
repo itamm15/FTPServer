@@ -132,4 +132,18 @@ public class Client {
             return "Error loading file content.";
         }
     }
+
+    public void removeFile(String fileName, Person currentUser) {
+        try {
+            output.println("REMOVE_FILE;" + currentUser.getEmail() + ";" + fileName);
+            String serverResponse = input.readLine();
+            if (serverResponse.equals("REMOVE_SUCCESS")) {
+                System.out.println("File removed successfully.");
+            } else {
+                System.out.println("File removal failed: " + serverResponse);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

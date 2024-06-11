@@ -55,9 +55,16 @@ public class FileBrowserPanel extends JPanel {
         add(userInfoPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
+        JPanel buttonPanel = new JPanel();
         JButton uploadButton = new JButton("Upload File");
         uploadButton.addActionListener(event -> uploadFileByUser());
-        add(uploadButton, BorderLayout.SOUTH);
+        buttonPanel.add(uploadButton);
+
+        JButton removeButton = new JButton("Remove File");
+        removeButton.addActionListener(event -> removeSelectedFile());
+        buttonPanel.add(removeButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
 
         loadFiles();
     }
@@ -97,5 +104,13 @@ public class FileBrowserPanel extends JPanel {
     private void openFileViewer(String fileName) {
         String fileContent = client.downloadFile(fileName, frame.getCurrentUser());
         new FileViewerFrame(fileName, fileContent).setVisible(true);
+    }
+
+    private void removeSelectedFile() {
+        String selectedFile = fileList.getSelectedValue();
+        if (selectedFile != null) {
+            client.removeFile(selectedFile, frame.getCurrentUser());
+            loadFiles();
+        }
     }
 }

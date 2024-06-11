@@ -45,6 +45,9 @@ public class ClientHandler implements Runnable {
                 else if(message.startsWith("DOWNLOAD")) {
                     handleDownloadFile(message);
                 }
+                else if (message.startsWith("REMOVE_FILE")) {
+                    handleRemoveFile(message);
+                }
                 else {
                     output.println("Server received: " + message);
                 }
@@ -217,6 +220,24 @@ public class ClientHandler implements Runnable {
             }
         } catch (IOException e) {
             output.println("ERROR_READING_FILE");
+        }
+    }
+
+    private void handleRemoveFile(String message) {
+        try {
+            String[] parts = message.split(";");
+            String email = parts[1];
+            String fileName = parts[2];
+
+            File file = new File("ftp_files/" + email + "/" + fileName);
+            if (file.exists() && file.delete()) {
+                output.println("REMOVE_SUCCESS");
+            } else {
+                output.println("REMOVE_FAILED");
+            }
+        } catch (Exception e) {
+            output.println("REMOVE_FAILED: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
