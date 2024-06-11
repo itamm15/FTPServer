@@ -101,12 +101,8 @@ public class Client {
                 os.write(buffer, 0, read);
             }
 
-            os.flush(); // Wysyła wszystkie dane, które mogą być zablokowane w buforze.
+            os.flush();
             fis.close();
-            //os.close(); // Zamykanie tylko OutputStream, a nie całego gniazda
-
-            // Wysłanie komunikatu zakończenia przesyłania
-            //output.println("END_UPLOAD");
 
             String serverResponse;
             if ((serverResponse = input.readLine()) != null) {
