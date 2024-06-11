@@ -7,6 +7,8 @@ import FTPServer.person.Person;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -43,11 +45,15 @@ public class FileBrowserPanel extends JPanel {
         fileList = new JList<>(listModel);
         JScrollPane scrollPane = new JScrollPane(fileList);
 
-        fileList.addListSelectionListener(event -> {
-            if (!event.getValueIsAdjusting()) {
-                String selectedFile = fileList.getSelectedValue();
-                if (selectedFile != null) {
-                    openFileViewer(selectedFile);
+        fileList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int index = fileList.locationToIndex(e.getPoint());
+                    if (index >= 0) {
+                        String selectedFile = fileList.getModel().getElementAt(index);
+                        openFileViewer(selectedFile);
+                    }
                 }
             }
         });
