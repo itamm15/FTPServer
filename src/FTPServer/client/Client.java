@@ -146,4 +146,20 @@ public class Client {
             e.printStackTrace();
         }
     }
+
+    public void shareFile(String fileName, String recipientEmail, Person currentUser) {
+        System.out.println("CLIENT: Sharing file with another user");
+        try {
+            output.println("SHARE_FILE;" + currentUser.getEmail() + ";" + recipientEmail + ";" + fileName);
+
+            String serverResponse = input.readLine();
+            if (serverResponse.equals("SHARE_SUCCESS")) {
+                System.out.println("File shared successfully.");
+            } else {
+                System.out.println("File sharing failed: " + serverResponse);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

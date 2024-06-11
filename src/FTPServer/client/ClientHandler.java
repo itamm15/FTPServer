@@ -48,6 +48,9 @@ public class ClientHandler implements Runnable {
                 else if (message.startsWith("REMOVE_FILE")) {
                     handleRemoveFile(message);
                 }
+                else if (message.startsWith("SHARE_FILE")) {
+                    handleShareFile(message);
+                }
                 else {
                     output.println("Server received: " + message);
                 }
@@ -238,6 +241,40 @@ public class ClientHandler implements Runnable {
         } catch (Exception e) {
             output.println("REMOVE_FAILED: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    private void handleShareFile(String message) {
+        try {
+            String[] parts = message.split(";");
+            String senderEmail = parts[1];
+            String recipientEmail = parts[2];
+            String fileName = parts[3];
+
+            CustomFile senderDirectory = new CustomFile("ftp_files/" + senderEmail);
+            CustomFile recipientDirectory = new CustomFile("ftp_files/" + recipientEmail);
+
+            if (!senderDirectory.exists() || !recipientDirectory.exists()) {
+                output.println("SHARE_FAILED: One or both user directories do not exist.");
+                return;
+            }
+
+            CustomFile fileToShare = new CustomFile(senderDirectory.getPath() + "/" + fileName);
+            CustomFile sharedFile = new CustomFile(recipientDirectory.getPath() + "/" + fileName);
+
+            try (FileInputStream fis = new FileInputStream(fileToShare.getPath());
+                 FileOutputStream fos = new FileOutputStream(sharedFile.getPath())) {
+
+                byte[] buffer = new byte[4096];
+                int read;
+                while ((read = fis.read(buffer)) != -1) {
+                    fos.write(buffer, 0, read);
+                }
+            }
+
+            output.println("SHARE_SUCCESS");
+        } catch (IOException e) {
+            output.println("SHARE_FAILED: " + e.getMessage());
         }
     }
 }

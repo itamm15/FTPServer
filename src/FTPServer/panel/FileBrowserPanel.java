@@ -19,6 +19,7 @@ public class FileBrowserPanel extends JPanel {
     private JLabel emailLabel;
     private JLabel nameLabel;
     private JList<String> fileList;
+
     private ArrayList<String> fileArrayList;
     private Frame frame;
     private Client client;
@@ -68,6 +69,10 @@ public class FileBrowserPanel extends JPanel {
         JButton removeButton = new JButton("Remove File");
         removeButton.addActionListener(event -> removeSelectedFile());
         buttonPanel.add(removeButton);
+
+        JButton shareButton = new JButton("Share File");
+        shareButton.addActionListener(event -> shareSelectedFile());
+        buttonPanel.add(shareButton);
 
         add(buttonPanel, BorderLayout.SOUTH);
 
@@ -119,6 +124,16 @@ public class FileBrowserPanel extends JPanel {
         if (selectedFile != null) {
             client.removeFile(selectedFile, frame.getCurrentUser());
             loadFiles();
+        }
+    }
+
+    private void shareSelectedFile() {
+        String selectedFile = fileList.getSelectedValue();
+        if (selectedFile != null) {
+            String recipientEmail = JOptionPane.showInputDialog(frame, "Enter the recipient's email:");
+            if (recipientEmail != null && !recipientEmail.isEmpty()) {
+                client.shareFile(selectedFile, recipientEmail, frame.getCurrentUser());
+            }
         }
     }
 }
