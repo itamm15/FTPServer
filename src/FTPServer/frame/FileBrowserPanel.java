@@ -11,6 +11,7 @@ public class FileBrowserPanel extends JPanel {
     private JLabel emailLabel;
     private JLabel nameLabel;
     private JList<String> fileList;
+    // TODO: change to ArrayList<>
     private DefaultListModel<String> listModel;
     private Frame frame;
     private Client client;
