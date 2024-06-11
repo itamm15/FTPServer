@@ -21,6 +21,7 @@ public class Person implements Serializable {
     private String firstname;
     private String lastname;
 
+    // TODO: trim the values to avoid white-spaces
     public Person(String email, String password, String firstname, String lastname, boolean shouldCheckEmail) throws Exception {
         boolean isEmailValid = true;
         if (shouldCheckEmail) isEmailValid = EmailValidator.isValid(email);
