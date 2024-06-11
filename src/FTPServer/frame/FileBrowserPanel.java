@@ -46,6 +46,7 @@ public class FileBrowserPanel extends JPanel {
         loadFiles();
     }
 
+    // TODO: move to client
     private void loadFiles() {
         System.out.println("CLIENT: Loading user files");
         try {
