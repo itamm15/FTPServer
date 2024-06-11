@@ -21,8 +21,12 @@ public class Frame extends JFrame {
     private CardLayout cardLayout;
     private JPanel cardPanel;
     private Client client;
+    private Person currentUser;
 
-    private static Person currentUser;
+    // PANELS
+    private RegistrationPanel registrationPanel;
+    private LoginPanel loginPanel;
+    private FileBrowserPanel fileBrowserPanel;
 
     public Frame(Client client) {
         super("FTPServer");
@@ -35,11 +39,13 @@ public class Frame extends JFrame {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
 
-        RegistrationPanel registrationPanel = new RegistrationPanel(this, this.client);
-        LoginPanel loginPanel = new LoginPanel(this, this.client);
+        registrationPanel = new RegistrationPanel(this, this.client);
+        loginPanel = new LoginPanel(this, this.client);
+        fileBrowserPanel = new FileBrowserPanel(this, this.client);
 
         cardPanel.add(registrationPanel, "RegistrationPanel");
         cardPanel.add(loginPanel, "LoginPanel");
+        cardPanel.add(fileBrowserPanel, "FileBrowserPanel");
 
         getContentPane().add(cardPanel);
         
@@ -57,11 +63,16 @@ public class Frame extends JFrame {
         cardLayout.show(cardPanel, "RegistrationPanel");
     }
 
-    public static Person getCurrentUser() {
+    public void showFileBrowserPanel() {
+        fileBrowserPanel.init();
+        cardLayout.show(cardPanel, "FileBrowserPanel");
+    }
+
+    public Person getCurrentUser() {
         return currentUser;
     }
 
-    public static void setCurrentUser(Person currentUser) {
-        Frame.currentUser = currentUser;
+    public void setCurrentUser(Person currentUser) {
+        this.currentUser = currentUser;
     }
 }

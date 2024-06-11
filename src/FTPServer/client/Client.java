@@ -39,6 +39,7 @@ public class Client {
                 Person person = (Person) objectInputStream.readObject();
                 System.out.println("CLIENT: Settling the current user");
                 frame.setCurrentUser(person);
+                frame.showFileBrowserPanel();
             } else {
                 System.out.println("CLIENT: The user could not be created, see errors: " + feedback);
             }
@@ -59,6 +60,7 @@ public class Client {
                 Person person = (Person) objectInputStream.readObject();
                 System.out.println("CLIENT: Settling the current user");
                 frame.setCurrentUser(person);
+                frame.showFileBrowserPanel();
             } else {
                 System.out.println("CLIENT: The user could not be created, see errors: " + feedback);
             }

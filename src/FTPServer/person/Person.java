@@ -4,9 +4,6 @@
  */
 package FTPServer.person;
 
-import FTPServer.frame.Frame;
-
-import javax.security.auth.login.AccountNotFoundException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -104,23 +101,6 @@ public class Person implements Serializable {
         }
     }
 
-    public static void authorizeUser(String email, String password) throws AccountNotFoundException {
-        Person currentPerson = null;
-        for (Person person: people) {
-            if (person.email.equals(email) && person.password.equals(password)) {
-                currentPerson = person;
-                break;
-            }
-        }
-
-        if (currentPerson != null) {
-            System.out.println("User has been authenticated");
-            Frame.setCurrentUser(currentPerson);
-        } else {
-            throw new AccountNotFoundException("Could not authenticate the user!");
-        }
-    }
-
     public static void loadUsersFromFile() {
         readUsersFromFile();
     }
@@ -149,6 +129,14 @@ public class Person implements Serializable {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
     }
 
     private static class EmailValidator {
