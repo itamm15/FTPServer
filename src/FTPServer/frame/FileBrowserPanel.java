@@ -5,10 +5,8 @@ import FTPServer.person.Person;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
 public class FileBrowserPanel extends JPanel {
-    private static final File FILES_FILE = new File("files.txt");
     private JLabel emailLabel;
     private JLabel nameLabel;
     private JList<String> fileList;
@@ -39,17 +37,17 @@ public class FileBrowserPanel extends JPanel {
         add(userInfoPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
-        loadFiles();
+        //      loadFiles();
     }
     
-    private void loadFiles() {
-        File directory = new File("files.txt");
-        File[] files = directory.listFiles();
-
-        if (files != null) {
-            for (File file : files) {
-                listModel.addElement(file.getName());
-            }
-        }
-    }
+//    private void loadFiles() {
+//        File directory = new File("files.txt");
+//        File[] files = directory.listFiles();
+//
+//        if (files != null) {
+//            for (File file : files) {
+//                listModel.addElement(file.getName());
+//            }
+//        }
+//    }
 }

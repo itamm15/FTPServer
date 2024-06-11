@@ -64,6 +64,11 @@ public class ClientHandler implements Runnable {
             System.out.println("SERVER: User created successfully!");
             person.saveUserToFile();
 
+            // Create user FTP_FILES directory
+            File userDirectory = new File("ftp_files/" + email);
+            userDirectory.mkdirs();
+            System.out.println("SERVER: User FTP_FILES directory has been created!");
+
             output.println("SUCCESS");
             objectOutputStream.writeObject(person);
             objectOutputStream.flush();
