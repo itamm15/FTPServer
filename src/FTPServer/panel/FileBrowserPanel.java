@@ -14,7 +14,7 @@ public class FileBrowserPanel extends JPanel {
     private JList<String> fileList;
     // TODO: change to ArrayList<>
     private DefaultListModel<String> listModel;
-    private FTPServer.frame.Frame frame;
+    private Frame frame;
     private Client client;
 
     public FileBrowserPanel(Frame frame, Client client) {
