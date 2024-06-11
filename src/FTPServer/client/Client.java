@@ -46,4 +46,26 @@ public class Client {
             exception.printStackTrace();
         }
     }
+
+    public void authorizeUser(String email, String password, Frame frame) {
+        try {
+            System.out.println("CLIENT: Start user authorization");
+            String message = String.format("AUTHORIZE;%s;%s", email, password);
+            output.println(message);
+
+            String feedback = input.readLine();
+            if (feedback.contains("SUCCESS")) {
+                System.out.println("CLIENT: User authorized successfully");
+                Person person = (Person) objectInputStream.readObject();
+                System.out.println("CLIENT: Settling the current user");
+                frame.setCurrentUser(person);
+            } else {
+                System.out.println("CLIENT: The user could not be created, see errors: " + feedback);
+            }
+        } catch (IOException e) {
+            System.out.println("CLIENT: Could not get the user!");
+        } catch (ClassNotFoundException e) {
+            System.out.println("CLIENT: Could not get the user!");
+        }
+    }
 }

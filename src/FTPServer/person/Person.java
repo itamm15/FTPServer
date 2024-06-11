@@ -65,6 +65,10 @@ public class Person implements Serializable {
         this(data[2], data[3], data[0], data[1], false);
     }
 
+    public static ArrayList<Person> getPeople() {
+        return people;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
@@ -137,6 +141,14 @@ public class Person implements Serializable {
         } catch (Exception exception) {
             System.out.println("Something went wrong, try again!" + exception);
         }
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     private static class EmailValidator {
