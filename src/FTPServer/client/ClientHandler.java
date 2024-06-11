@@ -42,6 +42,9 @@ public class ClientHandler implements Runnable {
                 else if (message.startsWith("LIST_FILES")) {
                     handleListFiles(message);
                 }
+                else if(message.startsWith("DOWNLOAD")) {
+                    handleDownloadFile(message);
+                }
                 else {
                     output.println("Server received: " + message);
                 }
@@ -190,6 +193,30 @@ public class ClientHandler implements Runnable {
             output.println("END_OF_LIST");
         } catch (Exception e) {
             output.println("Failed to list files: " + e.getMessage());
+        }
+    }
+
+    private void handleDownloadFile(String message) {
+        System.out.println("SERVER: Start downloading the file!");
+        try {
+            String[] parts = message.split(";");
+            String email = parts[1];
+            String fileName = parts[2];
+
+            File file = new File("ftp_files/" + email + "/" + fileName);
+            if (file.exists()) {
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    output.println(line);
+                }
+                output.println("END_OF_FILE");
+                reader.close();
+            } else {
+                output.println("FILE_NOT_FOUND");
+            }
+        } catch (IOException e) {
+            output.println("ERROR_READING_FILE");
         }
     }
 }

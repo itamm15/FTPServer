@@ -1,6 +1,7 @@
 package FTPServer.panel;
 
 import FTPServer.client.Client;
+import FTPServer.frame.FileViewerFrame;
 import FTPServer.frame.Frame;
 import FTPServer.person.Person;
 
@@ -41,6 +42,15 @@ public class FileBrowserPanel extends JPanel {
         listModel = new DefaultListModel<>();
         fileList = new JList<>(listModel);
         JScrollPane scrollPane = new JScrollPane(fileList);
+
+        fileList.addListSelectionListener(event -> {
+            if (!event.getValueIsAdjusting()) {
+                String selectedFile = fileList.getSelectedValue();
+                if (selectedFile != null) {
+                    openFileViewer(selectedFile);
+                }
+            }
+        });
 
         add(userInfoPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
@@ -84,4 +94,8 @@ public class FileBrowserPanel extends JPanel {
         }
     }
 
+    private void openFileViewer(String fileName) {
+        String fileContent = client.downloadFile(fileName, frame.getCurrentUser());
+        new FileViewerFrame(fileName, fileContent).setVisible(true);
+    }
 }

@@ -116,4 +116,20 @@ public class Client {
             e.printStackTrace();
         }
     }
+
+    public String downloadFile(String fileName, Person currentUser) {
+        try {
+            output.println("DOWNLOAD;" + currentUser.getEmail() + ";" + fileName);
+            StringBuilder fileContent = new StringBuilder();
+            String line;
+            while ((line = input.readLine()) != null && !line.equals("END_OF_FILE")) {
+                fileContent.append(line).append("\n");
+            }
+
+            return fileContent.toString();
+        } catch (IOException e) {
+            System.out.println("CLIENT: Oupsi, the file content could not be loaded!");
+            return "Error loading file content.";
+        }
+    }
 }
