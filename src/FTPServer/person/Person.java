@@ -33,15 +33,23 @@ public class Person implements Serializable {
         boolean isFirstNameValid = NameValidator.isValid(firstname);
         boolean isLastNameValid = NameValidator.isValid(lastname);
 
-        if (isEmailValid && isPasswordValid && isFirstNameValid && isLastNameValid) {
-            this.email = email;
-            this.password = password;
-            this.firstname = firstname;
-            this.lastname = lastname;
-        } else {
-            // TODO: add more specific way of returning an errors
-            throw new Exception("Oupsi, something went wrong! Try again!");
+        if (!isEmailValid) {
+            throw new Exception("Invalid email format or email already taken.");
         }
+        if (!isPasswordValid) {
+            throw new Exception("Password must be at least " + PasswordValidator.MIN_PASSWORD_LENGTH + " characters long.");
+        }
+        if (!isFirstNameValid) {
+            throw new Exception("First name cannot be blank.");
+        }
+        if (!isLastNameValid) {
+            throw new Exception("Last name cannot be blank.");
+        }
+
+        this.email = email;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
     }
 
     public Person(String email, String password, String firstname, String lastname) throws Exception {
@@ -56,15 +64,23 @@ public class Person implements Serializable {
         boolean isFirstNameValid = NameValidator.isValid(firstname);
         boolean isLastNameValid = NameValidator.isValid(lastname);
 
-        if (isEmailValid && isPasswordValid && isFirstNameValid && isLastNameValid) {
-            this.email = email;
-            this.password = password;
-            this.firstname = firstname;
-            this.lastname = lastname;
-        } else {
-            // TODO: add more specific way of returning an errors
-            throw new Exception("Oupsi, something went wrong! Try again!");
+        if (!isEmailValid) {
+            throw new Exception("Invalid email format or email already taken.");
         }
+        if (!isPasswordValid) {
+            throw new Exception("Password must be at least " + PasswordValidator.MIN_PASSWORD_LENGTH + " characters long.");
+        }
+        if (!isFirstNameValid) {
+            throw new Exception("First name cannot be blank.");
+        }
+        if (!isLastNameValid) {
+            throw new Exception("Last name cannot be blank.");
+        }
+
+        this.email = email;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
     }
 
     public Person(String[] data, boolean shouldCheckEmail) throws Exception {

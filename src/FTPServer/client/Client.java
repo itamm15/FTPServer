@@ -42,7 +42,7 @@ public class Client {
         return objectInputStream;
     }
 
-    public void registerUser(String email, String password, String firstname, String lastname, Frame frame) {
+    public void registerUser(String email, String password, String firstname, String lastname, Frame frame) throws Exception {
         try {
             System.out.println("CLIENT: Start user creation...");
             String message = String.format("REGISTER;%s;%s;%s;%s", email, password, firstname, lastname);
@@ -56,10 +56,10 @@ public class Client {
                 frame.setCurrentUser(person);
                 frame.showFileBrowserPanel();
             } else {
-                System.out.println("CLIENT: The user could not be created, see errors: " + feedback);
+                throw new Exception(feedback);
             }
         } catch (IOException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            throw new Exception("An error occurred during registration.");
         }
     }
 
