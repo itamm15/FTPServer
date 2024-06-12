@@ -9,10 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 
 public class FileBrowserPanel extends JPanel {
@@ -76,6 +73,10 @@ public class FileBrowserPanel extends JPanel {
 
         add(buttonPanel, BorderLayout.SOUTH);
 
+        JButton downloadButton = new JButton("Download File");
+        downloadButton.addActionListener(event -> downloadSelectedFile());
+        buttonPanel.add(downloadButton);
+
         loadFiles();
     }
 
@@ -133,6 +134,29 @@ public class FileBrowserPanel extends JPanel {
             String recipientEmail = JOptionPane.showInputDialog(frame, "Enter the recipient's email:");
             if (recipientEmail != null && !recipientEmail.isEmpty()) {
                 client.shareFile(selectedFile, recipientEmail, frame.getCurrentUser());
+            }
+        }
+    }
+
+    private void downloadSelectedFile() {
+        String selectedFile = fileList.getSelectedValue();
+        if (selectedFile != null) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Specify a file to save");
+            fileChooser.setSelectedFile(new File(selectedFile));
+
+            int userSelection = fileChooser.showSaveDialog(this);
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+                String fileContent = client.downloadFile(selectedFile, frame.getCurrentUser());
+
+                try (FileOutputStream fos = new FileOutputStream(fileToSave)) {
+                    fos.write(fileContent.getBytes());
+                    JOptionPane.showMessageDialog(this, "File downloaded successfully.");
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(this, "Failed to save the file.", "Error", JOptionPane.ERROR_MESSAGE);
+                    e.printStackTrace();
+                }
             }
         }
     }

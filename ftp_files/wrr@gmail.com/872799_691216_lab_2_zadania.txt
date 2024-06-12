@@ -1,0 +1,205 @@
+// ZADANIE 1
+
+
+using System;
+
+namespace ZadaniaNaStudia
+{
+    class Lab_2_zad_1
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Podaj liczbę wierszy macierzy");
+            int liczbaWierszy = GetRozmiar();
+
+            Console.WriteLine("Podaj liczbę kolumn macierzy");
+            int liczbaKolumn = GetRozmiar();
+
+            decimal[,] pierwszaMacierz = new decimal[liczbaWierszy, liczbaKolumn];
+            decimal[,] drugaMacierz = new decimal[liczbaWierszy, liczbaKolumn];
+
+            Console.WriteLine("Uzupełnij pierwszą macierz");
+
+            for (int wiersze = 0; wiersze < liczbaWierszy; wiersze++)
+            {
+                for (int kolumny = 0; kolumny < liczbaKolumn; kolumny++)
+                {
+                    Console.WriteLine($"Podaj wartość [{wiersze}][{kolumny}]");
+                    while (true)
+                    {
+                        try
+                        {
+                            decimal index = Convert.ToDecimal(Console.ReadLine());
+                            pierwszaMacierz[wiersze, kolumny] = index;
+                            break;
+                        } catch (Exception)
+                        {
+                            Console.WriteLine("Niepoprawna wartość, spróbuj jeszcze raz");
+                        }
+                    }
+                }
+            }
+
+            Console.WriteLine("Uzupełnij drugą macierz");
+
+            for (int wiersze = 0; wiersze < liczbaWierszy; wiersze++)
+            {
+                for (int kolumny = 0; kolumny < liczbaKolumn; kolumny++)
+                {
+                    Console.WriteLine($"Podaj wartość [{wiersze}][{kolumny}]");
+                    while (true)
+                    {
+                        try
+                        {
+                            decimal index = Convert.ToDecimal(Console.ReadLine());
+                            drugaMacierz[wiersze, kolumny] = index;
+                            break;
+
+                        } catch (Exception)
+                        {
+                            Console.WriteLine("Niepoprawna wartość, spróbuj jeszcze raz");
+                        }
+                    }
+                }
+            }
+
+            // Dodawanie macierzy
+            decimal[,] dodaneMacierze = new decimal[liczbaWierszy, liczbaKolumn];
+
+            for (int wiersze = 0; wiersze < liczbaWierszy; wiersze++)
+            {
+                for (int kolumny = 0; kolumny < liczbaKolumn; kolumny++)
+                {
+                    dodaneMacierze[wiersze, kolumny] = pierwszaMacierz[wiersze, kolumny] + drugaMacierz[wiersze, kolumny];
+                }
+            }
+
+            // Wyswietl dodane macierze:
+
+            Console.WriteLine("Wynik dodawnia dwóch macierzy:");
+
+            for (int wiersze = 0; wiersze < liczbaWierszy; wiersze++)
+            {
+                for (int kolumny = 0; kolumny < liczbaKolumn; kolumny++)
+                {
+                    Console.Write(dodaneMacierze[wiersze, kolumny] + "\t");
+                }
+                Console.WriteLine("");
+            }
+
+        }
+
+        private static int GetRozmiar()
+        {
+            while (true)
+            {
+                try
+                {
+                    return Convert.ToInt32(Console.ReadLine());
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Coś poszło nie tak podczas podawania wymiary, spróbuj jeszcze raz!");
+                }
+            }
+        }
+    }
+}
+
+
+
+// ZADANIE 2
+
+
+
+using System;
+
+namespace ZadaniaNaStudia
+{
+    class Lab_2_zad_2
+    {
+        static void Main(string[] args)
+        {
+            int[] pierwszaTablica = { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
+            int[] drugaTablica = { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
+
+            bool czyJestWTablicy = false;
+            int brakujacyElement = -1;
+
+            foreach (int element in pierwszaTablica) {
+                czyJestWTablicy = false;
+                foreach (int elementZDrugiej in drugaTablica)
+                {
+                    if (element == elementZDrugiej)
+                    {
+                        czyJestWTablicy = true;
+                        break;
+                    }
+                }
+
+                if (!czyJestWTablicy) brakujacyElement = element;
+            }
+
+            Console.WriteLine($"Znalazłem brakujący element, jest nim {brakujacyElement}!");
+        }
+    }
+}
+
+
+
+
+
+// ZADANIE 3
+
+
+
+
+using System;
+
+namespace ZadaniaNaStudia
+{
+    class Lab_2_zad_3
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Podaj rozmiar tablicy w przedziale od 10 do 20!");
+
+            int rozmiarTablicy;
+
+            while (true)
+            {
+                try
+                {
+                    rozmiarTablicy = Convert.ToInt16(Console.ReadLine());
+
+                    if (10 <= rozmiarTablicy && rozmiarTablicy <= 20) break;
+                    else
+                    {
+                        Console.WriteLine("Podana wartość nie mieści się w danym zakresie, spróbuj ponowanie!");
+                    }
+                } catch (Exception)
+                {
+                    Console.WriteLine("Coś poszło nie tak! Spróbuj podać jeszcze raz.");
+                }
+            }
+
+            int[] liczby = new int[rozmiarTablicy];
+            Random random = new Random();
+
+            for (int index = 0; index < rozmiarTablicy; index++)
+            {
+                liczby[index] = random.Next(1, 21);
+            }
+
+
+            Array.Sort(liczby);
+
+            Console.WriteLine("Oto liczby posortowane rosnąco:");
+
+            foreach (int liczba in liczby)
+            {
+                Console.Write(liczba + " ");
+            }
+        }
+    }
+}
