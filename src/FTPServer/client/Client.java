@@ -63,7 +63,7 @@ public class Client {
         }
     }
 
-    public void authorizeUser(String email, String password, Frame frame) {
+    public void authorizeUser(String email, String password, Frame frame) throws Exception {
         try {
             System.out.println("CLIENT: Start user authorization");
             String message = String.format("AUTHORIZE;%s;%s", email, password);
@@ -78,14 +78,19 @@ public class Client {
                 System.out.println("CLIENT: Initializing the FileBrowserPanel");
                 frame.showFileBrowserPanel();
             } else {
-                System.out.println("CLIENT: The user could not be created, see errors: " + feedback);
+                if (feedback.contains("ERROR")) {
+                    throw new Exception(feedback);
+                }
+                System.out.println("CLIENT: The user could not be authorized, see errors: " + feedback);
             }
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("CLIENT: Could not get the user!");
-        } catch (ClassNotFoundException e) {
-            System.out.println("CLIENT: Could not get the user!");
+            e.printStackTrace();
+            throw new Exception("Error communicating with server");
         }
     }
+
+
 
     public void uploadFile(File file, Person currentUser) {
         System.out.println("CLIENT: Uploading file to the server");

@@ -108,7 +108,7 @@ public class ClientHandler implements Runnable {
             String password = parts[2];
 
             Person currentPerson = null;
-            for (Person person: people) {
+            for (Person person : people) {
                 if (person.getEmail().equals(email) && person.getPassword().equals(password)) {
                     currentPerson = person;
                     break;
@@ -117,21 +117,19 @@ public class ClientHandler implements Runnable {
 
             if (currentPerson != null) {
                 System.out.println("SERVER: User has been authenticated");
-
                 output.println("SUCCESS");
                 objectOutputStream.writeObject(currentPerson);
                 objectOutputStream.flush();
             } else {
-                throw new AccountNotFoundException("Could not authenticate the user!");
+                output.println("ERROR: Invalid email or password");
             }
-        } catch (AccountNotFoundException e) {
-            System.out.println("SERVER: The user account could not be found!");
-            output.println("Could not find user account");
         } catch (IOException e) {
             System.out.println("SERVER: Something went wrong while sending the user");
-            output.println("Oupsi, something went wrong!");
+            output.println("ERROR: " + e.getMessage());
         }
     }
+
+
 
     private void handleFileUpload(String message) {
         System.out.println("SERVER: Processing the user files");
