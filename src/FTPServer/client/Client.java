@@ -83,6 +83,16 @@ public class Client {
         }
     }
 
+    /**
+     * Attempts to authorize a user with the given email and password.
+     * If the user is successfully authorized, the appropriate panel is displayed
+     * depending on whether the user is an admin or a regular user.
+     *
+     * @param email the email address of the user
+     * @param password the password of the user
+     * @param frame the main application frame
+     * @throws Exception if there is an error during authorization or communication with the server
+     */
     public void authorizeUser(String email, String password, Frame frame) throws Exception {
         closeConnections();
         init();
