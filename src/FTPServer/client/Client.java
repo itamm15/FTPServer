@@ -61,6 +61,18 @@ public class Client {
         return output;
     }
 
+
+    /**
+     * Sends a request to the server to register a new user with the provided details.
+     * If registration is successful, the current user is set and the file browser panel is shown.
+     *
+     * @param email the email address of the new user
+     * @param password the password for the new user
+     * @param firstname the first name of the new user
+     * @param lastname the last name of the new user
+     * @param frame the main application frame
+     * @throws Exception if an error occurs during registration
+     */
     public void registerUser(String email, String password, String firstname, String lastname, Frame frame) throws Exception {
         try {
             System.out.println("CLIENT: Start user creation...");
@@ -204,6 +216,13 @@ public class Client {
         }
     }
 
+
+    /**
+     * Sends a request to the server to remove a file for the specified user.
+     *
+     * @param fileName the name of the file to be removed
+     * @param currentUser the user who is requesting the file removal
+     */
     public void removeFile(String fileName, Person currentUser) {
         try {
             output.println("REMOVE_FILE;" + currentUser.getEmail() + ";" + fileName);
@@ -220,6 +239,13 @@ public class Client {
         }
     }
 
+    /**
+     * Sends a request to the server to share a file with another user.
+     *
+     * @param fileName the name of the file to be shared
+     * @param recipientEmail the email of the recipient user
+     * @param currentUser the user who is sharing the file
+     */
     public void shareFile(String fileName, String recipientEmail, Person currentUser) {
         System.out.println("CLIENT: Sharing file with another user");
         try {
