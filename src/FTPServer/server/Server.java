@@ -16,6 +16,7 @@ public class Server {
 
             while (true) {
                 Socket socket = serverSocket.accept();
+                System.out.println(socket + "socket");
                 System.out.println("New client connected");
 
                 ClientHandler clientHandler = new ClientHandler(socket);

@@ -5,6 +5,7 @@ import FTPServer.person.Person;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Client {
     private static final String HOST = "localhost";
@@ -21,8 +22,30 @@ public class Client {
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream(), true);
             objectInputStream = new ObjectInputStream(socket.getInputStream());
+
+            System.out.println("CLIENT: Streams initialized");
         } catch (Exception exception) {
             System.out.println("Something went wrong!" + exception);
+        }
+    }
+
+    public void closeConnections() {
+        try {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+            if (output != null) {
+                output.close();
+            }
+            if (input != null) {
+                input.close();
+            }
+            if (objectInputStream != null) {
+                objectInputStream.close();
+            }
+            System.out.println("Connections closed successfully");
+        } catch (Exception exception) {
+            System.out.println("Could not close the connections: " + exception.getMessage());
         }
     }
 
@@ -38,15 +61,12 @@ public class Client {
         return output;
     }
 
-    public ObjectInputStream getObjectInputStream() {
-        return objectInputStream;
-    }
-
     public void registerUser(String email, String password, String firstname, String lastname, Frame frame) throws Exception {
         try {
             System.out.println("CLIENT: Start user creation...");
             String message = String.format("REGISTER;%s;%s;%s;%s", email, password, firstname, lastname);
             output.println(message);
+            output.flush();
 
             String feedback = input.readLine();
             if (feedback.contains("SUCCESS")) {
@@ -64,17 +84,29 @@ public class Client {
     }
 
     public void authorizeUser(String email, String password, Frame frame) throws Exception {
+        closeConnections();
+        init();
         try {
             System.out.println("CLIENT: Start user authorization");
             String message = String.format("AUTHORIZE;%s;%s", email, password);
             output.println(message);
+            output.flush();
 
             String feedback = input.readLine();
             if (feedback.contains("SUCCESS")) {
+                String[] data = feedback.split(";");
+                String currentPersonEmail = data[1];
                 System.out.println("CLIENT: User authorized successfully");
-                Person person = (Person) objectInputStream.readObject();
+                Person.loadUsersFromFile();
+                ArrayList<Person> people = Person.getPeople();
+                Person currentPerson = null;
+
+                for (Person person : people) {
+                    if (person.getEmail().equals(currentPersonEmail)) currentPerson = person;
+                }
+
                 System.out.println("CLIENT: Settling the current user");
-                frame.setCurrentUser(person);
+                frame.setCurrentUser(currentPerson);
                 System.out.println("CLIENT: Initializing the FileBrowserPanel");
                 frame.showFileBrowserPanel();
             } else {
@@ -85,17 +117,15 @@ public class Client {
             }
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("CLIENT: Could not get the user!");
-            e.printStackTrace();
             throw new Exception("Error communicating with server");
         }
     }
-
-
 
     public void uploadFile(File file, Person currentUser) {
         System.out.println("CLIENT: Uploading file to the server");
         try {
             output.println("UPLOAD;" + currentUser.getEmail() + ";" + file.getName());
+            output.flush();
 
             byte[] buffer = new byte[4096];
             FileInputStream fis = new FileInputStream(file);
@@ -125,6 +155,8 @@ public class Client {
     public String downloadFile(String fileName, Person currentUser) {
         try {
             output.println("DOWNLOAD;" + currentUser.getEmail() + ";" + fileName);
+            output.flush();
+
             StringBuilder fileContent = new StringBuilder();
             String line;
             while ((line = input.readLine()) != null && !line.equals("END_OF_FILE")) {
@@ -141,6 +173,8 @@ public class Client {
     public void removeFile(String fileName, Person currentUser) {
         try {
             output.println("REMOVE_FILE;" + currentUser.getEmail() + ";" + fileName);
+            output.flush();
+
             String serverResponse = input.readLine();
             if (serverResponse.equals("REMOVE_SUCCESS")) {
                 System.out.println("File removed successfully.");
@@ -156,6 +190,7 @@ public class Client {
         System.out.println("CLIENT: Sharing file with another user");
         try {
             output.println("SHARE_FILE;" + currentUser.getEmail() + ";" + recipientEmail + ";" + fileName);
+            output.flush();
 
             String serverResponse = input.readLine();
             if (serverResponse.equals("SHARE_SUCCESS")) {

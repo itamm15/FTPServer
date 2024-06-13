@@ -3,7 +3,6 @@ package FTPServer.client;
 import FTPServer.file.CustomFile;
 import FTPServer.person.Person;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -86,12 +85,14 @@ public class ClientHandler implements Runnable {
             System.out.println("SERVER: User FTP_FILES directory has been created!");
 
             output.println("SUCCESS");
+            output.flush();
             objectOutputStream.writeObject(person);
             objectOutputStream.flush();
         } catch (Exception e) {
             System.out.println("SERVER: Could not create the user!");
             try {
                 output.println("Registration failed: " + e.getMessage());
+                output.flush();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -99,36 +100,31 @@ public class ClientHandler implements Runnable {
     }
 
     private void handleAuthorization(String message) {
-        try {
-            Person.loadUsersFromFile();
-            ArrayList<Person> people = Person.getPeople();
+        Person.loadUsersFromFile();
+        ArrayList<Person> people = Person.getPeople();
 
-            String[] parts = message.split(";");
-            String email = parts[1];
-            String password = parts[2];
+        String[] parts = message.split(";");
+        String email = parts[1];
+        String password = parts[2];
 
-            Person currentPerson = null;
-            for (Person person : people) {
-                if (person.getEmail().equals(email) && person.getPassword().equals(password)) {
-                    currentPerson = person;
-                    break;
-                }
+        Person currentPerson = null;
+        for (Person person : people) {
+            if (person.getEmail().equals(email) && person.getPassword().equals(password)) {
+                currentPerson = person;
+                break;
             }
+        }
 
-            if (currentPerson != null) {
-                System.out.println("SERVER: User has been authenticated");
-                output.println("SUCCESS");
-                objectOutputStream.writeObject(currentPerson);
-                objectOutputStream.flush();
-            } else {
-                output.println("ERROR: Invalid email or password");
-            }
-        } catch (IOException e) {
-            System.out.println("SERVER: Something went wrong while sending the user");
-            output.println("ERROR: " + e.getMessage());
+        if (currentPerson != null) {
+            System.out.println("SERVER: User has been authenticated");
+            String feedbackMessage = String.format("SUCCESS;%s", currentPerson.getEmail());
+            output.println(feedbackMessage);
+            output.flush();
+        } else {
+            output.println("ERROR: Invalid email or password");
+            output.flush();
         }
     }
-
 
 
     private void handleFileUpload(String message) {
@@ -141,6 +137,7 @@ public class ClientHandler implements Runnable {
             CustomFile userDirectory = new CustomFile("ftp_files/" + email);
             if (!userDirectory.exists()) {
                 output.println("UPLOAD_FAILED: User directory does not exist.");
+                output.flush();
                 return;
             }
 
@@ -150,6 +147,7 @@ public class ClientHandler implements Runnable {
             if (!file.createNewFile()) {
                 System.out.println("SERVER: Could not create the file!");
                 output.println("UPLOAD_FAILED: Failed to create file.");
+                output.flush();
                 return;
             }
 
@@ -169,11 +167,13 @@ public class ClientHandler implements Runnable {
 
             System.out.println("SERVER: File uploaded successfully!");
             output.println("UPLOAD_SUCCESS");
+            output.flush();
 
             fos.close();
         } catch (IOException e) {
             System.out.println("SERVER: something went wrong!");
             output.println("UPLOAD_FAILED: " + e.getMessage());
+            output.flush();
         }
     }
 
@@ -185,6 +185,7 @@ public class ClientHandler implements Runnable {
             File userDirectory = new File("ftp_files/" + email);
             if (!userDirectory.exists()) {
                 output.println("User directory does not exist.");
+                output.flush();
                 return;
             }
 
@@ -192,11 +193,14 @@ public class ClientHandler implements Runnable {
             if (files != null) {
                 for (File file : files) {
                     output.println(file.getName());
+                    output.flush();
                 }
             }
             output.println("END_OF_LIST");
+            output.flush();
         } catch (Exception e) {
             output.println("Failed to list files: " + e.getMessage());
+            output.flush();
         }
     }
 

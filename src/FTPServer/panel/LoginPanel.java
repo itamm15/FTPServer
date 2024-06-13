@@ -97,6 +97,7 @@ public class LoginPanel extends JPanel {
             client.authorizeUser(email, password, frame);
         } catch (Exception e) {
             String errorMessage = e.getMessage();
+            System.out.println(errorMessage);
             if (errorMessage.contains("email")) {
                 emailErrorLabel.setText(errorMessage);
             } else if (errorMessage.contains("password")) {
