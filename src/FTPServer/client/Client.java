@@ -49,10 +49,6 @@ public class Client {
         }
     }
 
-    public Socket getSocket() {
-        return socket;
-    }
-
     public BufferedReader getInput() {
         return input;
     }
