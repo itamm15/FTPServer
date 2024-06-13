@@ -54,6 +54,10 @@ public class AdminPanel extends JPanel {
         loadFiles();
     }
 
+    /**
+     * Loads all user files for the admin panel. This method sends a request to the server to list all files,
+     * clears the current list, and populates it with the files received from the server.
+     */
     private void loadFiles() {
         System.out.println("CLIENT: Loading all user files");
         try {
@@ -73,6 +77,12 @@ public class AdminPanel extends JPanel {
         }
     }
 
+    /**
+     * Opens a file viewer for the specified file. This method first determines the user's email from the file name,
+     * loads the user's information, and then downloads and displays the file content.
+     *
+     * @param fileName the name of the file to be viewed, in the format "userEmail: fileName"
+     */
     private void openFileViewer(String fileName) {
         Person.loadUsersFromFile();
         String[] data = fileName.split(":");
