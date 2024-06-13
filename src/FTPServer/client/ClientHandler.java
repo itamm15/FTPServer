@@ -76,6 +76,8 @@ public class ClientHandler implements Runnable {
             String firstname = parts[3];
             String lastname = parts[4];
 
+            if (email.equals(AdminPerson.getAdminEmail())) throw new IllegalAccessException("This email address is already taken!");
+
             Person person = new Person(email, password, firstname, lastname);
             System.out.println("SERVER: User created successfully!");
             person.saveUserToFile();

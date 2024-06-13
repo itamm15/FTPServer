@@ -13,4 +13,8 @@ public class AdminPerson extends Person implements Serializable {
     public static boolean isAdmin(String email, String password) {
         return ADMIN_EMAIL.equals(email) && ADMIN_PASSWORD.equals(password);
     }
+
+    public static String getAdminEmail() {
+        return ADMIN_EMAIL;
+    }
 }
