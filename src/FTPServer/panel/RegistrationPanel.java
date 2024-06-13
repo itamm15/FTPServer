@@ -154,7 +154,7 @@ public class RegistrationPanel extends JPanel {
             } else if (errorMessage.contains("Last name")) {
                 lastnameErrorLabel.setText(errorMessage);
             } else {
-                JOptionPane.showMessageDialog(this, errorMessage, "Registration Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, errorMessage, "Registration Error", "All of the fields need to be filled!");
             }
         }
     }
