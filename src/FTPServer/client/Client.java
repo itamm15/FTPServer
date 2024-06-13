@@ -178,6 +178,14 @@ public class Client {
         }
     }
 
+    /**
+     * Downloads a file from the server for the specified user.
+     * The file content is read line by line and returned as a string.
+     *
+     * @param fileName the name of the file to be downloaded
+     * @param currentUser the user who is downloading the file
+     * @return the content of the file as a string, or an error message if the file could not be loaded
+     */
     public String downloadFile(String fileName, Person currentUser) {
         try {
             output.println("DOWNLOAD;" + currentUser.getEmail() + ";" + fileName);
