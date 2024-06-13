@@ -177,11 +177,22 @@ public class Person implements Serializable {
         return lastname;
     }
 
+
+    /**
+     * A utility class for validating email addresses.
+     */
     private static class EmailValidator {
         private static final String EMAIL_PATTERN =
                 "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 
+
+        /**
+         * Validates the given email address.
+         *
+         * @param email the email address to validate
+         * @return true if the email address is valid and not taken, false otherwise
+         */
         public static boolean isValid(String email) {
             if (email == null) {
                 return false;
