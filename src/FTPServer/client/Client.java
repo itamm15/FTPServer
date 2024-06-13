@@ -140,6 +140,13 @@ public class Client {
         }
     }
 
+    /**
+     * Uploads a file to the server for the specified user.
+     * The file is read in chunks using a buffer and sent to the server.
+     *
+     * @param file the file to be uploaded
+     * @param currentUser the user who is uploading the file
+     */
     public void uploadFile(File file, Person currentUser) {
         System.out.println("CLIENT: Uploading file to the server");
         try {
