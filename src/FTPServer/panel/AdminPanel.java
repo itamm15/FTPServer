@@ -1,10 +1,14 @@
 package FTPServer.panel;
 
 import FTPServer.client.Client;
+import FTPServer.frame.FileViewerFrame;
 import FTPServer.frame.Frame;
+import FTPServer.person.Person;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,7 +16,6 @@ import java.io.PrintWriter;
 public class AdminPanel extends JPanel {
     private JLabel emailLabel;
     private JList<String> fileList;
-
     private DefaultListModel<String> listModel;
     private Frame frame;
     private Client client;
@@ -31,6 +34,19 @@ public class AdminPanel extends JPanel {
         listModel = new DefaultListModel<>();
         fileList = new JList<>(listModel);
         JScrollPane scrollPane = new JScrollPane(fileList);
+
+        fileList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int index = fileList.locationToIndex(e.getPoint());
+                    if (index >= 0) {
+                        String selectedFile = listModel.getElementAt(index);
+                        openFileViewer(selectedFile);
+                    }
+                }
+            }
+        });
 
         add(emailLabel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
@@ -55,5 +71,17 @@ public class AdminPanel extends JPanel {
         } catch (IOException e) {
             System.out.println("CLIENT: Could not load the files!" + e);
         }
+    }
+
+    private void openFileViewer(String fileName) {
+        Person.loadUsersFromFile();
+        String[] data = fileName.split(":");
+        String userEmail = data[0].trim();
+        String file = data[1].trim();
+
+        Person person = Person.getPersonByEmail(userEmail);
+
+        String fileContent = client.downloadFile(file, person);
+        new FileViewerFrame(fileName, fileContent).setVisible(true);
     }
 }

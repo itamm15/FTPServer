@@ -100,6 +100,8 @@ public class Client {
 
                 if (currentPersonEmail.equals("admin@admin.com")) {
                     System.out.println("CLIENT: Admin logged in");
+
+                    frame.setCurrentUser(new Person("admin@admin.com", "admin123", "admin", "user" ));
                     frame.showAdminPanel();
                 } else {
                     Person.loadUsersFromFile();
@@ -111,6 +113,7 @@ public class Client {
                     }
 
                     System.out.println("CLIENT: Settling the current user");
+
                     frame.setCurrentUser(currentPerson);
                     System.out.println("CLIENT: Initializing the FileBrowserPanel");
                     frame.showFileBrowserPanel();

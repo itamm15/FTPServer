@@ -149,6 +149,18 @@ public class Person implements Serializable {
         }
     }
 
+    public static Person getPersonByEmail(String email) {
+        Person foundPerson = null;
+        for (Person person : people) {
+            if (person.getEmail().equals(email)) {
+                foundPerson = person;
+                break;
+            }
+        }
+
+        return foundPerson;
+    }
+
     public String getEmail() {
         return email;
     }
