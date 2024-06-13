@@ -3,3 +3,4 @@ mat;kam;test@gmail.com;123123123
 mat;pat;mat@gmai.com;123123
 wrrr;pat;matp@gmail.com;12345
 kuba;senderowski;kuba@gmail.com;kubeczek
+daga;daga;daga@gmail.com;daga1

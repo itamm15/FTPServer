@@ -5,6 +5,7 @@
 package FTPServer.frame;
 
 import FTPServer.client.Client;
+import FTPServer.panel.AdminPanel;
 import FTPServer.panel.FileBrowserPanel;
 import FTPServer.panel.LoginPanel;
 import FTPServer.panel.RegistrationPanel;
@@ -30,6 +31,7 @@ public class Frame extends JFrame {
     private RegistrationPanel registrationPanel;
     private LoginPanel loginPanel;
     private FileBrowserPanel fileBrowserPanel;
+    private AdminPanel adminPanel;
 
     public Frame(Client client) {
         super("FTPServer");
@@ -45,10 +47,12 @@ public class Frame extends JFrame {
         registrationPanel = new RegistrationPanel(this, this.client);
         loginPanel = new LoginPanel(this, this.client);
         fileBrowserPanel = new FileBrowserPanel(this, this.client);
+        adminPanel = new AdminPanel(this, this.client);
 
         cardPanel.add(registrationPanel, "RegistrationPanel");
         cardPanel.add(loginPanel, "LoginPanel");
         cardPanel.add(fileBrowserPanel, "FileBrowserPanel");
+        cardPanel.add(adminPanel, "AdminPanel");
 
         getContentPane().add(cardPanel);
         
@@ -69,6 +73,11 @@ public class Frame extends JFrame {
     public void showFileBrowserPanel() {
         fileBrowserPanel.init();
         cardLayout.show(cardPanel, "FileBrowserPanel");
+    }
+
+    public void showAdminPanel() {
+        adminPanel.init();
+        cardLayout.show(cardPanel, "AdminPanel");
     }
 
     public Person getCurrentUser() {

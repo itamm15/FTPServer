@@ -97,18 +97,24 @@ public class Client {
                 String[] data = feedback.split(";");
                 String currentPersonEmail = data[1];
                 System.out.println("CLIENT: User authorized successfully");
-                Person.loadUsersFromFile();
-                ArrayList<Person> people = Person.getPeople();
-                Person currentPerson = null;
 
-                for (Person person : people) {
-                    if (person.getEmail().equals(currentPersonEmail)) currentPerson = person;
+                if (currentPersonEmail.equals("admin@admin.com")) {
+                    System.out.println("CLIENT: Admin logged in");
+                    frame.showAdminPanel();
+                } else {
+                    Person.loadUsersFromFile();
+                    ArrayList<Person> people = Person.getPeople();
+                    Person currentPerson = null;
+
+                    for (Person person : people) {
+                        if (person.getEmail().equals(currentPersonEmail)) currentPerson = person;
+                    }
+
+                    System.out.println("CLIENT: Settling the current user");
+                    frame.setCurrentUser(currentPerson);
+                    System.out.println("CLIENT: Initializing the FileBrowserPanel");
+                    frame.showFileBrowserPanel();
                 }
-
-                System.out.println("CLIENT: Settling the current user");
-                frame.setCurrentUser(currentPerson);
-                System.out.println("CLIENT: Initializing the FileBrowserPanel");
-                frame.showFileBrowserPanel();
             } else {
                 if (feedback.contains("ERROR")) {
                     throw new Exception(feedback);

@@ -1,6 +1,7 @@
 package FTPServer.client;
 
 import FTPServer.file.CustomFile;
+import FTPServer.person.AdminPerson;
 import FTPServer.person.Person;
 
 import java.io.*;
@@ -100,32 +101,47 @@ public class ClientHandler implements Runnable {
     }
 
     private void handleAuthorization(String message) {
-        Person.loadUsersFromFile();
-        ArrayList<Person> people = Person.getPeople();
+        try {
+            Person.loadUsersFromFile();
+            ArrayList<Person> people = Person.getPeople();
 
-        String[] parts = message.split(";");
-        String email = parts[1];
-        String password = parts[2];
+            String[] parts = message.split(";");
+            String email = parts[1];
+            String password = parts[2];
 
-        Person currentPerson = null;
-        for (Person person : people) {
-            if (person.getEmail().equals(email) && person.getPassword().equals(password)) {
-                currentPerson = person;
-                break;
+            Person currentPerson = null;
+            AdminPerson currentAdmin = null;
+
+            if (AdminPerson.isAdmin(email, password)) {
+                currentAdmin = new AdminPerson(email, password, "Admin", "User");
+            } else {
+                for (Person person : people) {
+                    if (person.getEmail().equals(email) && person.getPassword().equals(password)) {
+                        currentPerson = person;
+                        break;
+                    }
+                }
             }
-        }
 
-        if (currentPerson != null) {
-            System.out.println("SERVER: User has been authenticated");
-            String feedbackMessage = String.format("SUCCESS;%s", currentPerson.getEmail());
-            output.println(feedbackMessage);
-            output.flush();
-        } else {
-            output.println("ERROR: Invalid email or password");
+            if (currentPerson != null) {
+                System.out.println("SERVER: User has been authenticated");
+                String feedbackMessage = String.format("SUCCESS;%s", currentPerson.getEmail());
+                output.println(feedbackMessage);
+                output.flush();
+            } else if (currentAdmin != null) {
+                System.out.println("SERVER: Admin has been authenticated");
+                output.println("SUCCESS;admin@admin.com");
+                output.flush();
+            } else {
+                output.println("ERROR: Invalid email or password");
+                output.flush();
+            }
+        } catch (Exception exception) {
+            System.out.println("Something went wrong! " + exception);
+            output.println("ERROR: The user could not be authorized, please try again later.");
             output.flush();
         }
     }
-
 
     private void handleFileUpload(String message) {
         System.out.println("SERVER: Processing the user files");
@@ -182,18 +198,36 @@ public class ClientHandler implements Runnable {
             String[] parts = message.split(";");
             String email = parts[1];
 
-            File userDirectory = new File("ftp_files/" + email);
-            if (!userDirectory.exists()) {
-                output.println("User directory does not exist.");
-                output.flush();
-                return;
-            }
-
-            File[] files = userDirectory.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    output.println(file.getName());
+            if (AdminPerson.isAdmin(email, "admin123")) {
+                File directory = new File("ftp_files/");
+                File[] userDirectories = directory.listFiles();
+                if (userDirectories != null) {
+                    for (File userDirectory : userDirectories) {
+                        if (userDirectory.isDirectory()) {
+                            File[] files = userDirectory.listFiles();
+                            if (files != null) {
+                                for (File file : files) {
+                                    output.println(userDirectory.getName() + ": " + file.getName());
+                                    output.flush();
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                File userDirectory = new File("ftp_files/" + email);
+                if (!userDirectory.exists()) {
+                    output.println("User directory does not exist.");
                     output.flush();
+                    return;
+                }
+
+                File[] files = userDirectory.listFiles();
+                if (files != null) {
+                    for (File file : files) {
+                        output.println(file.getName());
+                        output.flush();
+                    }
                 }
             }
             output.println("END_OF_LIST");

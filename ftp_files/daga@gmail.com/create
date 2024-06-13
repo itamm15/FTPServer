@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Curiosum</title>
+    <link rel="icon" href="/images/favicon.svg" type="image/x-icon">
+    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon">
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/app-88b27a711f2d982b4ef33e1173f08562.css?vsn=d"/>
+    <script defer type="text/javascript" src="/js/app-4642a4ad43c285e0e3321e6c4dabbba6.js?vsn=d"></script>
+  </head>
+  <body>
+    <div class="page-wrapper">
+
+        <div class="page-body">
+<div class="welcome-popup modal fade show" id="loadModal" tabindex="-1" role="dialog" style="display: block;">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="modal-header"></div>
+        <div class="contain p-30">
+          <div class="text-center">
+            <h2>Hello!</h2>
+            <br />
+<a class="btn btn-primary btn-lg txt-white" href="/auth/azure/new">Sign in</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+        </div>
+
+    </div>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
+  </body>
+</html>
