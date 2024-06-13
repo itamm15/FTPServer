@@ -176,9 +176,9 @@ public class Client {
             String serverResponse;
             if ((serverResponse = input.readLine()) != null) {
                 if (serverResponse.equals("UPLOAD_SUCCESS")) {
-                    System.out.println("File uploaded successfully.");
+                    System.out.println("CLIENT: File uploaded successfully.");
                 } else {
-                    System.out.println("File upload failed: " + serverResponse);
+                    System.out.println("CLIENT: File upload failed: " + serverResponse);
                 }
             }
         } catch (IOException e) {
@@ -226,12 +226,12 @@ public class Client {
 
             String serverResponse = input.readLine();
             if (serverResponse.equals("REMOVE_SUCCESS")) {
-                System.out.println("File removed successfully.");
+                System.out.println("CLIENT: File removed successfully.");
             } else {
-                System.out.println("File removal failed: " + serverResponse);
+                System.out.println("CLIENT: File removal failed: " + serverResponse);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            System.out.println("CLIENT: File removal failed: " + exception);
         }
     }
 
@@ -250,12 +250,12 @@ public class Client {
 
             String serverResponse = input.readLine();
             if (serverResponse.equals("SHARE_SUCCESS")) {
-                System.out.println("File shared successfully.");
+                System.out.println("CLIENT: File shared successfully.");
             } else {
-                System.out.println("File sharing failed: " + serverResponse);
+                System.out.println("CLIENT: File sharing failed: " + serverResponse);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            System.out.println("CLIENT: File sharing failed: " + exception);
         }
     }
 }

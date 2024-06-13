@@ -195,6 +195,12 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Handles the request to list files. If the request is from an admin, lists all files from all users.
+     * If the request is from a regular user, lists only the files in their directory.
+     *
+     * @param message the message containing the request details, including the email of the requester
+     */
     private void handleListFiles(String message) {
         try {
             String[] parts = message.split(";");
